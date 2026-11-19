@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Process Management &amp; CPU Scheduling Simulator</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@500;700&family=IBM+Plex+Sans:wght@400;500;600&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- ===================== HEADER + TAB DASHBOARD (no external links) ===================== -->
+<header class="top"><div class="wrap">
+  <div class="brand">
+    <div class="logo" aria-hidden="true">OS</div>
+    <div><h1 data-i="app.title">PROCESS MANAGEMENT &amp; CPU SCHEDULING SIMULATOR</h1>
+    <p data-i="app.sub">Operating Systems · Chapter 3: Processes</p></div>
+  </div>
+  <div class="tabs" role="tablist" aria-label="Sections">
+    <button class="tbn" role="tab" id="tb-sim" data-tab="sim" aria-controls="p-sim" aria-selected="true" data-i="tab.sim">Simulator</button>
+    <button class="tbn" role="tab" id="tb-cmp" data-tab="cmp" aria-controls="p-cmp" aria-selected="false" data-i="tab.cmp">Compare</button>
+    <button class="tbn" role="tab" id="tb-lab" data-tab="lab" aria-controls="p-lab" aria-selected="false" data-i="tab.lab">Process Lab</button>
+    <button class="tbn" role="tab" id="tb-learn" data-tab="learn" aria-controls="p-learn" aria-selected="false" data-i="tab.learn">Learn</button>
+    <button class="tbn" role="tab" id="tb-quiz" data-tab="quiz" aria-controls="p-quiz" aria-selected="false" data-i="tab.quiz">Quiz</button>
+  </div>
+  <button class="btn o s" id="lang" type="button">العربية</button>
+</div></header>
+
+<main class="wrap">
+
+<!-- ===================== 1. SIMULATOR ===================== -->
+<section class="panel on" id="p-sim" role="tabpanel" aria-labelledby="tb-sim">
+
+  <!-- Dashboard -->
+  <div class="dash" aria-live="polite">
+    <div class="kpi"><small data-i="dash.total">Total processes</small><b id="k-total" class="num">0</b></div>
+    <div class="kpi"><small data-i="dash.ready">Ready</small><b id="k-ready" class="num">0</b></div>
+    <div class="kpi run"><small data-i="dash.running">Running</small><b id="k-running" class="num">—</b></div>
+    <div class="kpi"><small>
+      <span data-i="dash.waiting">Waiting (I/O)</span><i class="info" tabindex="0" data-tip="Processes blocked on I/O or an event. This simulator models CPU bursts only (no I/O bursts), so the count is always 0 here. Waiting for the CPU is shown as Ready." data-i-tip="tip.waiting">i</i></small><b id="k-waiting" class="num">0</b></div>
+    <div class="kpi done"><small data-i="dash.done">Completed</small><b id="k-done" class="num">0</b></div>
+    <div class="kpi algo"><small data-i="dash.algo">Algorithm</small><b id="k-algo">FCFS</b></div>
+  </div>
+
+  <div class="sim-grid">
+    <!-- Process input -->
+    <div class="card">
+      <div class="ch"><h2 data-i="proc.title">Processes</h2><span class="mut" id="proc-count"></span></div>
+      <form class="addrow" id="add-form" autocomplete="off" novalidate>
+        <div><label for="a-at" data-i="f.at">Arrival</label><input type="text" inputmode="numeric" id="a-at" value="0"></div>
+        <div><label for="a-bt" data-i="f.bt">Burst</label><input type="text" inputmode="numeric" id="a-bt" value="4"></div>
+        <div><label for="a-pr"><span data-i="f.pr">Priority</span><i class="info" tabindex="0" data-tip="Lower number = higher priority (1 is the highest)." data-i-tip="tip.priority">i</i></label><input type="text" inputmode="numeric" id="a-pr" value="1"></div>
+        <button class="btn" type="submit" id="btn-add" data-i="btn.add">+ Add process</button>
+      </form>
+      <div class="tools">
+        <select id="sample-sel" aria-label="Sample"></select>
+        <button class="btn o s" type="button" id="btn-sample" data-i="btn.sample">Load sample</button>
+        <button class="btn danger s" type="button" id="btn-clear" data-i="btn.clear">Clear all</button>
+      </div>
+      <div class="msg-line" id="proc-msg" role="status"></div>
+      <div class="tscroll"><table id="proc-table" aria-label="Processes">
+        <thead><tr><th class="l" data-i="th.id">Process</th><th data-i="th.at">Arrival</th><th data-i="th.bt">Burst</th><th id="th-pr" data-i="th.pr">Priority</th><th aria-label="Delete"></th></tr></thead>
+        <tbody></tbody></table></div>
+      <div class="empty" id="proc-empty" style="display:none" data-i="proc.empty">No processes yet. Add one above or load a sample.</div>
+    </div>
+
+    <!-- Algorithm + controls -->
+    <div class="card">
+      <div class="ch"><h2 data-i="algo.title">Scheduling algorithm</h2></div>
+      <div class="algos" id="algos" role="radiogroup" aria-label="Algorithm">
+        <button type="button" class="algo" role="radio" data-algo="fcfs"><b>FCFS</b><small data-i="algo.fcfs.s">First Come First Served</small></button>
+        <button type="button" class="algo" role="radio" data-algo="sjf"><b>SJF</b><small data-i="algo.sjf.s">Shortest Job First (non-preemptive)</small></button>
+        <button type="button" class="algo" role="radio" data-algo="priority"><b>Priority</b><small data-i="algo.pr.s">Priority (non-preemptive)</small></button>
+        <button type="button" class="algo" role="radio" data-algo="rr"><b>Round Robin</b><small data-i="algo.rr.s">Preemptive, time quantum</small></button>
+      </div>
+      <div class="qrow"><label for="quantum" data-i="q.label">Time quantum</label><input type="text" inputmode="numeric" id="quantum" value="3">
+        <i class="info" tabindex="0" data-tip="Used by Round Robin only. A whole number from 1 to 50." data-i-tip="tip.quantum">i</i></div>
+      <div class="msg-line" id="q-msg" role="status"></div>
+
+      <div class="ctrls">
+        <button class="btn" id="c-start" type="button" data-i="c.start">▶ Start</button>
+        <button class="btn o" id="c-pause" type="button" data-i="c.pause">❚❚ Pause</button>
+        <button class="btn o" id="c-resume" type="button" data-i="c.resume">▶ Resume</button>
+        <button class="btn o" id="c-step" type="button" data-i="c.step">Next step ›</button>
+        <button class="btn danger" id="c-reset" type="button" data-i="c.reset">↺ Reset</button>
+      </div>
+      <div class="speed"><label for="speed" data-i="c.speed">Speed</label><input type="range" id="speed" min="1" max="5" value="3"><span id="speed-v" class="num">3×</span></div>
+      <div class="clock"><span class="badge" id="sim-status">idle</span><span class="t num" id="sim-t">t = –</span><div class="prog"><i id="sim-prog"></i></div></div>
+    </div>
+  </div>
+
+  <!-- State visualisation -->
+  <div class="card" style="margin-top:14px">
+    <div class="ch"><h2 data-i="state.title">Process states during the simulation</h2>
+      <span class="mut" style="font-size:13px" data-i="state.hint">1 tick = 1 time unit. Every state comes from the real schedule.</span></div>
+    <div class="pipe" id="pipe"></div>
+    <div class="qline" id="qline"></div>
+    <div class="log" id="log" aria-live="polite"></div>
+  </div>
+
+  <!-- Gantt -->
+  <div class="card" style="margin-top:14px">
+    <div class="ch"><h2 data-i="gantt.title">Gantt chart</h2><span class="mut" id="gantt-sub" style="font-size:13px"></span></div>
+    <div id="gantt"></div>
+    <div class="legend" id="gantt-legend"></div>
+  </div>
+
+  <!-- Results -->
+  <div class="card" style="margin-top:14px">
+    <div class="ch"><h2 data-i="res.title">Performance results</h2></div>
+    <div class="stats" id="stats"></div>
+    <div class="tscroll"><table id="res-table" aria-label="Results"></table></div>
+    <details class="more"><summary data-i="rules.sum">Formulas and tie-breaking rules</summary><div>
+      <ul>
+        <li><code>TAT = CT − AT</code> &nbsp; <code>WT = TAT − BT</code> &nbsp; <code>RT = first start − AT</code></li>
+        <li data-i="rules.util">CPU utilization = busy time ÷ total time (from t = 0 to the last completion) × 100. Idle gaps count as unused.</li>
+        <li data-i="rules.tie">Ties: FCFS → earlier arrival, then row order. SJF → shorter burst, then arrival, then row order. Priority → lower number first, then arrival, then row order.</li>
+        <li data-i="rules.rr">Round Robin: FIFO queue. A process arriving exactly when a quantum expires is queued before the preempted process.</li>
+      </ul></div></details>
+  </div>
+</section>
+
+<!-- ===================== 2. COMPARE ===================== -->
+<section class="panel" id="p-cmp" role="tabpanel" aria-labelledby="tb-cmp">
+  <div class="banner" id="cmp-banner"></div>
+  <div class="tools" style="margin-bottom:12px">
+    <label for="quantum2" class="mut" data-i="q.label">Time quantum</label>
+    <input type="text" inputmode="numeric" id="quantum2" value="3" style="width:84px">
+    <span class="mut" style="font-size:13px" data-i="cmp.same">All four algorithms run on the same process list as the Simulator tab.</span>
+  </div>
+  <div class="barsgrid" id="cmp-bars"></div>
+  <div class="grid4" id="cmp-cards"></div>
+</section>
+
+<!-- ===================== 3. PROCESS LAB ===================== -->
+<section class="panel" id="p-lab" role="tabpanel" aria-labelledby="tb-lab">
+  <div class="card">
+    <div class="ch"><h2 data-i="lab.title">Interactive Process Lab</h2></div>
+    <p class="mut" style="margin:0 0 12px" data-i="lab.intro">Build a process tree. Tap a process to select it, then call <code>fork()</code>, <code>exec()</code>, <code>wait()</code> or <code>exit()</code>. Every action is explained.</p>
+    <div class="lab">
+      <div><svg class="pt-svg" id="lab-svg" viewBox="0 0 700 320" role="group" aria-label="Process tree"></svg>
+        <div class="leg"><span data-i="lab.l.run">running</span><span class="w" data-i="lab.l.wait">waiting (off the ready queue)</span><span class="z" data-i="lab.l.zom">zombie</span><span class="d" data-i="lab.l.dead">terminated</span></div></div>
+      <div>
+        <div class="tip" id="lab-msg" style="margin-top:0;min-height:62px"></div>
+        <div class="pbts" id="lab-btns">
+          <button class="btn s" data-a="fork">fork()</button><button class="btn s" data-a="exec">exec()</button>
+          <button class="btn s" data-a="wait">wait()</button><button class="btn s" data-a="exit">exit()</button>
+          <button class="btn s o" data-a="reset" data-i="lab.reset">Reset</button>
+        </div>
+        <div class="chal"><b data-i="lab.chal">Challenges</b><ol>
+          <li data-i="lab.c1">Make a <b>zombie</b>: fork a child, then exit the child before its parent calls wait().</li>
+          <li data-i="lab.c2">Trigger <b>cascading termination</b>: build 2 levels, then exit the top child.</li>
+          <li data-i="lab.c3">Make a parent <b>wait</b>, then wake it by exiting its child.</li></ol></div>
+        <div class="plog" id="lab-log"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 4. LEARN (short theory) ===================== -->
+<section class="panel" id="p-learn" role="tabpanel" aria-labelledby="tb-learn">
+
+  <details class="acc" open><summary data-i="l1.t">1 · Process concept and memory layout</summary><div class="body">
+    <p style="margin-top:0" data-i="l1.p">A <b>process</b> is a <b>program in execution</b>. A program is a passive file on disk; it becomes a process when it is loaded into memory.</p>
+    <div class="tscroll"><table class="cmp"><thead><tr><th></th><th data-i="l1.prog">Program</th><th data-i="l1.proc">Process</th></tr></thead><tbody>
+      <tr><td data-i="l1.r1">Nature</td><td data-i="l1.r1a">Passive (a file)</td><td data-i="l1.r1b">Active (running)</td></tr>
+      <tr><td data-i="l1.r2">Lives in</td><td data-i="l1.r2a">Disk</td><td data-i="l1.r2b">Main memory + CPU</td></tr>
+      <tr><td data-i="l1.r3">Count</td><td data-i="l1.r3a">One file</td><td data-i="l1.r3b">Many processes can run the same program</td></tr></tbody></table></div>
+    <div class="grid2" style="margin-top:14px">
+      <div><h3><span data-i="l1.mem">Memory layout</span><i class="info" tabindex="0" data-tip="Text and data have a fixed size. Only the stack and heap grow and shrink, and the OS must keep them from overlapping." data-i-tip="tip.mem">i</i></h3>
+        <div class="mem" id="mem"><div class="k" style="flex:2">Stack ↓</div><div class="gp" style="flex:4"></div><div class="hp" style="flex:2">Heap ↑</div><div class="dt">Data</div><div class="tx">Text</div></div>
+        <div class="row-c"><button class="btn s" id="m-sg" data-i="m.push">Call function (push)</button><button class="btn s o" id="m-sr" data-i="m.pop">Return (pop)</button><button class="btn s" id="m-hg" data-i="m.malloc">malloc</button><button class="btn s o" id="m-hr" data-i="m.free">free</button></div>
+        <div class="tip" id="m-msg"></div></div>
+      <div><ul>
+        <li><b>Text</b> — <span data-i="l1.text">executable code</span></li>
+        <li><b>Data</b> — <span data-i="l1.data">global and static variables</span></li>
+        <li><b>Heap</b> — <span data-i="l1.heap">memory allocated at run time</span></li>
+        <li><b>Stack</b> — <span data-i="l1.stack">parameters, return address, local variables</span></li></ul></div>
+    </div>
+  </div></details>
+
+  <details class="acc"><summary data-i="l2.t">2 · Process states and lifecycle</summary><div class="body">
+    <p style="margin-top:0" data-i="l2.p">Click an arrow label or a button to move the process. Glowing dashed arrows are the transitions allowed from the current state.</p>
+    <div class="flow"><span>New</span><i>→</i><span>Ready</span><i>→</i><span>Running</span><i>→</i><span>Waiting</span><i>→</i><span>Terminated</span></div>
+    <div class="dg" id="state-dg"></div>
+    <div class="row-c" id="state-btns"></div>
+    <div class="tip" id="state-msg"></div>
+  </div></details>
+
+  <details class="acc"><summary data-i="l3.t">3 · Process Control Block (PCB)</summary><div class="body">
+    <p style="margin-top:0" data-i="l3.p">The PCB is the record the OS keeps for every process (identified by its PID). It is created with the process and deleted when it terminates. Tap a field.</p>
+    <div class="pcbgrid" id="pcb-grid"></div>
+    <div class="tip" id="pcb-info"></div>
+    <h3 style="margin-top:12px" data-i="l3.live">Live PCB view (from the simulator)</h3>
+    <div class="tools"><select id="pcb-sel" aria-label="PCB process"></select></div>
+    <div class="tscroll"><table class="cmp" id="pcb-live"></table></div>
+  </div></details>
+
+  <details class="acc"><summary data-i="l4.t">4 · CPU scheduling algorithms</summary><div class="body">
+    <div class="grid2">
+      <div class="card"><h3>FCFS</h3><span data-i="l4.fcfs">Runs processes in arrival order. Simple, but a long job delays all short ones behind it (convoy effect).</span></div>
+      <div class="card"><h3>SJF (non-preemptive)</h3><span data-i="l4.sjf">Picks the shortest burst among arrived processes. Gives the lowest average wait for a given set, but needs burst times in advance and can starve long jobs.</span></div>
+      <div class="card"><h3>Priority (non-preemptive)</h3><span data-i="l4.pr">Picks the highest priority (lowest number). Can starve low-priority jobs; aging is the usual fix.</span></div>
+      <div class="card"><h3>Round Robin</h3><span data-i="l4.rr">Each process gets at most one time quantum, then goes to the back of the queue. Fair, with good response time; the quantum size matters (too small = many context switches, too large = FCFS).</span></div>
+    </div>
+    <div class="tip" data-i="l4.cs"><b>Context switch:</b> the kernel saves the old process's state in its PCB and loads the next one. It is pure overhead.</div>
+  </div></details>
+
+  <details class="acc"><summary data-i="l5.t">5 · Process operations: fork(), exec(), wait(), exit()</summary><div class="body">
+    <div class="grid4">
+      <div class="card"><h3>fork()</h3><span data-i="l5.fork">Creates a child that duplicates the parent.</span><div class="codebox">pid = fork();</div></div>
+      <div class="card"><h3>exec()</h3><span data-i="l5.exec">Replaces the process's memory with a new program.</span><div class="codebox">execlp("ls", "ls", NULL);</div></div>
+      <div class="card"><h3>wait()</h3><span data-i="l5.wait">Parent sleeps until a child terminates. Without it, finished children become zombies.</span><div class="codebox">wait(&amp;status);</div></div>
+      <div class="card"><h3>exit()</h3><span data-i="l5.exit">Ends the process; the OS reclaims its memory, files and buffers.</span><div class="codebox">exit(0);</div></div>
+    </div>
+    <div class="row-c" style="margin-top:12px"><button class="btn" type="button" data-goto="lab" data-i="l5.try">Try them in the Process Lab →</button></div>
+  </div></details>
+
+  <details class="acc"><summary data-i="l6.t">6 · Interprocess communication (IPC)</summary><div class="body">
+    <p style="margin-top:0" data-i="l6.p">Cooperating processes need IPC. There are two models.</p>
+    <div class="tscroll"><table class="cmp"><thead><tr><th></th><th data-i="l6.shm">Shared memory</th><th data-i="l6.msg">Message passing</th></tr></thead><tbody>
+      <tr><td data-i="l6.a">How</td><td data-i="l6.a1">A memory region is shared; processes read and write it</td><td><code>send()</code> / <code>receive()</code> <span data-i="l6.a2">through the OS</span></td></tr>
+      <tr><td data-i="l6.b">Speed</td><td data-i="l6.b1">Fast (no OS call per exchange)</td><td data-i="l6.b2">Slower (kernel involved)</td></tr>
+      <tr><td data-i="l6.c">Challenge</td><td data-i="l6.c1">Users must synchronize access</td><td data-i="l6.c2">Naming, buffering (zero / bounded / unbounded)</td></tr>
+      <tr><td data-i="l6.d">Best for</td><td data-i="l6.d1">Processes on one machine</td><td data-i="l6.d2">Distributed systems</td></tr></tbody></table></div>
+    <h3 style="margin-top:14px" data-i="l6.pc">Producer–consumer: bounded buffer (5 slots)</h3>
+    <div class="slots" id="slots"><span></span><span></span><span></span><span></span><span></span></div>
+    <div class="row-c"><button class="btn s" id="b-prod" data-i="b.prod">Produce an item</button><button class="btn s o" id="b-cons" data-i="b.cons">Consume an item</button></div>
+    <div class="tip" id="b-msg"></div>
+  </div></details>
+</section>
+
+<!-- ===================== 5. QUIZ ===================== -->
+<section class="panel" id="p-quiz" role="tabpanel" aria-labelledby="tb-quiz">
+  <div class="card">
+    <div class="ch"><h2 data-i="quiz.title">Quiz: Processes and CPU Scheduling</h2>
+      <button class="btn o s" id="q-reset" type="button" data-i="quiz.reset">Reset quiz</button></div>
+    <div><span id="score">0 / 0</span> <span class="mut" id="q-prog"></span></div>
+    <div class="qbar"><i id="q-bar"></i></div>
+    <div id="q-box"></div>
+  </div>
+</section>
+
+</main>
+<footer class="wrap" style="text-align:center;color:var(--mut);padding:10px 18px 40px;font-size:13px" data-i="footer">Operating Systems (501471) · Chapter 3: Processes · runs entirely in your browser, no backend</footer>
+
+<script src="js/scheduler.js"></script>
+<script src="js/i18n.js"></script>
+<script src="js/gantt.js"></script>
+<script src="js/simulator.js"></script>
+<script src="js/compare.js"></script>
+<script src="js/learn.js"></script>
+<script src="js/lab.js"></script>
+<script src="js/quiz.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
