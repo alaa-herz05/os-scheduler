@@ -9,12 +9,12 @@
 </head>
 <body>
 
-<!-- ===================== HEADER + TAB DASHBOARD (no external links) ===================== -->
+
 <header class="top"><div class="wrap">
   <div class="brand">
     <div class="logo" aria-hidden="true">OS</div>
     <div><h1 data-i="app.title">PROCESS MANAGEMENT &amp; CPU SCHEDULING SIMULATOR</h1>
-    <p data-i="app.sub">Operating Systems · Chapter 3: Processes</p></div>
+    <p data-i="app.sub">Processes</p></div>
   </div>
   <div class="tabs" role="tablist" aria-label="Sections">
     <button class="tbn" role="tab" id="tb-sim" data-tab="sim" aria-controls="p-sim" aria-selected="true" data-i="tab.sim">Simulator</button>
@@ -28,10 +28,10 @@
 
 <main class="wrap">
 
-<!-- ===================== 1. SIMULATOR ===================== -->
+
 <section class="panel on" id="p-sim" role="tabpanel" aria-labelledby="tb-sim">
 
-  <!-- Dashboard -->
+
   <div class="dash" aria-live="polite">
     <div class="kpi"><small data-i="dash.total">Total processes</small><b id="k-total" class="num">0</b></div>
     <div class="kpi"><small data-i="dash.ready">Ready</small><b id="k-ready" class="num">0</b></div>
@@ -105,7 +105,7 @@
     <div class="legend" id="gantt-legend"></div>
   </div>
 
-  <!-- Results -->
+
   <div class="card" style="margin-top:14px">
     <div class="ch"><h2 data-i="res.title">Performance results</h2></div>
     <div class="stats" id="stats"></div>
@@ -120,7 +120,6 @@
   </div>
 </section>
 
-<!-- ===================== 2. COMPARE ===================== -->
 <section class="panel" id="p-cmp" role="tabpanel" aria-labelledby="tb-cmp">
   <div class="banner" id="cmp-banner"></div>
   <div class="tools" style="margin-bottom:12px">
@@ -157,7 +156,7 @@
   </div>
 </section>
 
-<!-- ===================== 4. LEARN (short theory) ===================== -->
+
 <section class="panel" id="p-learn" role="tabpanel" aria-labelledby="tb-learn">
 
   <details class="acc" open><summary data-i="l1.t">1 · Process concept and memory layout</summary><div class="body">
@@ -230,7 +229,7 @@
   </div></details>
 </section>
 
-<!-- ===================== 5. QUIZ ===================== -->
+
 <section class="panel" id="p-quiz" role="tabpanel" aria-labelledby="tb-quiz">
   <div class="card">
     <div class="ch"><h2 data-i="quiz.title">Quiz: Processes and CPU Scheduling</h2>
@@ -242,7 +241,7 @@
 </section>
 
 </main>
-<footer class="wrap" style="text-align:center;color:var(--mut);padding:10px 18px 40px;font-size:13px" data-i="footer">Operating Systems (501471) · Chapter 3: Processes · runs entirely in your browser, no backend</footer>
+<footer class="wrap" style="text-align:center;color:var(--mut);padding:10px 18px 40px;font-size:13px" data-i="footer">Operating Systems</footer>
 
 <script src="js/scheduler.js"></script>
 <script src="js/i18n.js"></script>
