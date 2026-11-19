@@ -265,3 +265,40 @@ html[lang=ar] .btn,html[lang=ar] .tbn,html[lang=ar] h1,html[lang=ar] h2,html[lan
   .brow{grid-template-columns:64px 1fr 52px}
 }
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+
+/* ---------- 14. Queues & Context Switch tab ---------- */
+.qs,.cs{width:100%;height:auto;direction:ltr;display:block}
+.qs text,.cs text{fill:var(--txt);font:600 14px "IBM Plex Sans",sans-serif}
+.qs text{font-size:11.5px}
+.qs .ql{stroke:var(--mut);stroke-width:1.6;fill:none}
+.qb rect,.qb ellipse,.qb circle{fill:#0f0720;stroke:var(--gd);stroke-width:1.6;transition:.3s}
+.qb.on rect,.qb.on ellipse,.qb.on circle{fill:#3b1f73;stroke:var(--g);filter:drop-shadow(0 0 8px var(--g))}
+.tk{fill:var(--am);transition:transform .42s ease;filter:drop-shadow(0 0 6px var(--am))}
+.qst{margin:8px 0;color:var(--mut)}.qst b{color:var(--am)}
+.cs .ln{fill:var(--g);font-size:14px}.cs text{font-size:13px}
+.cs-e{opacity:0;transition:opacity .5s}.cs-e.v{opacity:1}.cs-e.ex{fill:var(--g)}
+.cs-e.id{fill:none;stroke:var(--gd);stroke-dasharray:4 4;stroke-width:1.5}
+.cs-e.ov rect{fill:#2a1552;stroke:var(--am);stroke-width:1.5}
+.cs-e.ar path{stroke:var(--am);stroke-width:2;fill:none}.cs-e.ar text{fill:var(--am);font-size:12px}
+.cs-e.cur{filter:drop-shadow(0 0 8px var(--am))}
+.cs-lay{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:18px;align-items:start}
+.cs-side{min-width:0}
+.cs-stat{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 10px}
+.cs-stat div{flex:1;min-width:84px;text-align:center;padding:7px 6px;border-radius:9px;border:1px solid var(--line);background:#0f0720;font-size:13px;transition:.3s}
+.cs-stat b{display:block;font-size:12px;color:var(--mut);font-weight:600}
+.cs-stat .s-e{border-color:var(--g);background:rgba(201,162,255,.2);box-shadow:0 0 14px rgba(155,92,255,.35)}
+.cs-stat .s-i{opacity:.7}.cs-stat .s-n,.cs-stat .s-x{opacity:.4}
+.cs-stat .s-o{border-color:var(--am);background:rgba(255,180,84,.14)}
+.steps{list-style:none;padding:0;margin:0;counter-reset:s}
+.steps li{counter-increment:s;padding:7px 12px;padding-inline-start:44px;position:relative;border:1px solid var(--line);border-radius:8px;margin:5px 0;color:var(--mut);font-size:14.5px;transition:.3s;cursor:pointer}
+.steps li::before{content:counter(s);position:absolute;inset-inline-start:10px;top:8px;width:24px;height:24px;border-radius:50%;background:#0f0720;border:1px solid var(--gd);text-align:center;line-height:22px;font-size:13px}
+.steps li strong{display:block;color:var(--txt);font:700 14.5px "Space Grotesk",sans-serif}
+.steps li.a{color:var(--txt);border-color:var(--g);background:rgba(201,162,255,.1);box-shadow:0 0 16px rgba(155,92,255,.3)}
+.steps li.a strong{color:var(--g)}.steps li.a::before{background:var(--g);color:var(--ink)}
+html[lang=ar] .steps li strong{font-family:"Tajawal",sans-serif}
+@media(max-width:1020px){.cs-lay{grid-template-columns:1fr}}
+@media(max-width:700px){
+  #qd-svg,#cs-svg{overflow-x:auto;-webkit-overflow-scrolling:touch;direction:ltr;padding-bottom:4px}
+  #qd-svg .qs{min-width:640px}
+  #cs-svg .cs{min-width:540px}
+}

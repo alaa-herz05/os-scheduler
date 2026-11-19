@@ -29,7 +29,7 @@
   });
 
   I18N.init();
-  App.initSimulator(); App.initCompare(); App.initLearn(); App.initLab(); App.initQuiz();
+  App.initSimulator(); App.initCompare(); App.initLearn(); App.initLab(); App.initCtx(); App.initQuiz();
 
   I18N.onChange(function () { App.renderAll(); App.emit('lang'); });
   document.getElementById('lang').onclick = function () {

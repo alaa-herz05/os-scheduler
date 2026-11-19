@@ -231,6 +231,8 @@
     t: t,
     set: function (l) { lang = l; applyStatic(); listeners.forEach(function (fn) { fn(); }); },
     onChange: function (fn) { listeners.push(fn); },
+    // lets a module register its own strings (used by ctx.js)
+    extend: function (en, ar) { var k; for (k in en) DYN.en[k] = en[k]; for (k in ar) DYN.ar[k] = ar[k]; },
     // used by the self-check in tests: every static key must have an Arabic entry
     _keys: function () { return { static: Object.keys(EN), ar: Object.keys(AR_STATIC), tips: Object.keys(ENTIP), arTips: Object.keys(AR_TIP), dynEn: Object.keys(DYN.en), dynAr: Object.keys(DYN.ar) }; }
   };

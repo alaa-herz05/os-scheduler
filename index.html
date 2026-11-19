@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Process Management &amp; CPU Scheduling Simulator</title>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@500;700&family=IBM+Plex+Sans:wght@400;500;600&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/fonts.css">
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -19,6 +19,7 @@
   <div class="tabs" role="tablist" aria-label="Sections">
     <button class="tbn" role="tab" id="tb-sim" data-tab="sim" aria-controls="p-sim" aria-selected="true" data-i="tab.sim">Simulator</button>
     <button class="tbn" role="tab" id="tb-cmp" data-tab="cmp" aria-controls="p-cmp" aria-selected="false" data-i="tab.cmp">Compare</button>
+    <button class="tbn" role="tab" id="tb-ctx" data-tab="ctx" aria-controls="p-ctx" aria-selected="false" data-i="tab.ctx">Queues &amp; Context Switch</button>
     <button class="tbn" role="tab" id="tb-lab" data-tab="lab" aria-controls="p-lab" aria-selected="false" data-i="tab.lab">Process Lab</button>
     <button class="tbn" role="tab" id="tb-learn" data-tab="learn" aria-controls="p-learn" aria-selected="false" data-i="tab.learn">Learn</button>
     <button class="tbn" role="tab" id="tb-quiz" data-tab="quiz" aria-controls="p-quiz" aria-selected="false" data-i="tab.quiz">Quiz</button>
@@ -131,6 +132,35 @@
   <div class="grid4" id="cmp-cards"></div>
 </section>
 
+<!-- ===================== QUEUES + CONTEXT SWITCH ===================== -->
+<section class="panel" id="p-ctx" role="tabpanel" aria-labelledby="tb-ctx">
+  <div class="card">
+    <div class="ch"><h2 data-i="qd.title">Follow one process through the scheduling queues</h2></div>
+    <p class="mut" style="margin:0 0 8px" data-i="qd.hint">Press the buttons in order. Only the buttons that are valid for the process’s current place are enabled.</p>
+    <div id="qd-svg"></div>
+    <div class="qst"><span data-i="qd.state">Process state:</span> <b id="qd-st"></b></div>
+    <div class="row-c" id="qd-btns"></div>
+    <div class="tip" id="qd-msg" aria-live="polite"></div>
+  </div>
+
+  <div class="card" style="margin-top:14px">
+    <div class="ch"><h2 data-i="cs.title">Context switch</h2></div>
+    <p style="margin:0 0 12px" data-i="cs.intro">Switching the CPU to another process requires a <b>state save</b> of the current process and a <b>state restore</b> of a different one. The kernel saves the old context <b>in its PCB</b> and loads the saved context of the new process. <b>Context-switch time is pure overhead</b>: the system does no useful work while switching, and the time depends on hardware support.</p>
+    <div class="cs-lay">
+      <div id="cs-svg"></div>
+      <div class="cs-side">
+        <div class="cs-stat" id="cs-stat"></div>
+        <ol class="steps" id="cs-steps"></ol>
+        <div class="row-c">
+          <button class="btn s" type="button" id="cs-next" data-i="cs.next">Next step</button>
+          <button class="btn s o" type="button" id="cs-auto" data-i="cs.auto">Auto-play</button>
+          <button class="btn s o" type="button" id="cs-reset" data-i="cs.reset">Reset</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ===================== 3. PROCESS LAB ===================== -->
 <section class="panel" id="p-lab" role="tabpanel" aria-labelledby="tb-lab">
   <div class="card">
@@ -203,6 +233,7 @@
       <div class="card"><h3>Round Robin</h3><span data-i="l4.rr">Each process gets at most one time quantum, then goes to the back of the queue. Fair, with good response time; the quantum size matters (too small = many context switches, too large = FCFS).</span></div>
     </div>
     <div class="tip" data-i="l4.cs"><b>Context switch:</b> the kernel saves the old process's state in its PCB and loads the next one. It is pure overhead.</div>
+    <div class="row-c" style="margin-top:12px"><button class="btn" type="button" data-goto="ctx" data-i="l4.try">See it step by step →</button></div>
   </div></details>
 
   <details class="acc"><summary data-i="l5.t">5 · Process operations: fork(), exec(), wait(), exit()</summary><div class="body">
@@ -250,6 +281,7 @@
 <script src="js/compare.js"></script>
 <script src="js/learn.js"></script>
 <script src="js/lab.js"></script>
+<script src="js/ctx.js"></script>
 <script src="js/quiz.js"></script>
 <script src="js/app.js"></script>
 </body>
