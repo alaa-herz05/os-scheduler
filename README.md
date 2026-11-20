@@ -1,27 +1,20 @@
-# Process Management & CPU Scheduling Simulator
+# os-scheduler-simulator
+A browser-based simulator for the Operating Systems “Processes” chapter, built at Jadara University. It lets you edit a process table, pick a scheduling algorithm and watch the simulation run step by step. A dynamic Gantt chart, including idle periods, and per-process Completion, Turnaround, Waiting and Response times, with averages and CPU utilization, show the result.
 
-Operating Systems, Chapter 3: Processes. Plain HTML + CSS + vanilla JavaScript. No backend, no build step, no frameworks.
+Features
 
-## Run
-Open `index.html` in any modern browser (double-click it). Fonts load from Google Fonts when online and fall back to system fonts offline.
+FCFS, SJF (non-preemptive), Priority (non-preemptive) and Round Robin, with deterministic tie-breaking
+Start / Pause / Resume / Next Step / Reset and speed control, with a live process-state pipeline
+Side-by-side algorithm comparison that highlights the lowest average waiting time
+Queues & Context Switch tab: follow one process through the scheduling queues, and a step-by-step context-switch timeline (from Chapter 3)
+Process Lab for fork / exec / wait / exit, zombies and orphans
+Concise theory: process states, PCB, memory layout, IPC and a bounded-buffer demo
+15-question bilingual quiz
+Dark purple theme, responsive layout, English/Arabic (RTL) toggle
+Input validation and edge-case handling
 
-Run the algorithm tests (optional, needs Node.js): `node tests/scheduler.test.js`
+Offline: fonts are bundled in fonts/, so no internet is needed.
+Android app: see os-scheduler-app/ (Capacitor project).
 
-## Structure
-| File | Role |
-|---|---|
-| `index.html` | Layout and static text (tabs: Simulator, Compare, Process Lab, Learn, Quiz) |
-| `css/style.css` | Dark purple theme, responsive layout, RTL support |
-| `js/scheduler.js` | **Pure scheduling logic** (FCFS, SJF, Priority, Round Robin, metrics). No DOM. |
-| `js/gantt.js` | Gantt chart and legend rendering |
-| `js/simulator.js` | State, process table + validation, controls, dashboard, state pipeline, results |
-| `js/compare.js` | Four-algorithm comparison |
-| `js/learn.js`, `js/lab.js`, `js/quiz.js` | Theory widgets, Process Lab, quiz |
-| `js/i18n.js` | English / Arabic |
-| `tests/scheduler.test.js` | Hand-computed cases + 400 random invariant checks |
-
-## Rules
-- Times are integers. CPU utilization = busy time / total time (from t = 0 to last completion).
-- Ties: FCFS = arrival, then row order. SJF = burst, arrival, row order. Priority (lower number = higher) = priority, arrival, row order.
-- Round Robin: FIFO queue; an arrival at the exact moment a quantum expires is queued before the preempted process.
-- Limits: 10 processes, arrival 0-100, burst 1-50, priority 1-20, quantum 1-50.
+Run: open index.html in any browser. No install or build step.
+Test: node tests/scheduler.test.js runs 3,317 checks.
