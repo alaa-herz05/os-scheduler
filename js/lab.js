@@ -19,19 +19,31 @@
     function desc(id, out) { kids(id).forEach(function (k) { out.push(k); desc(k.id, out); }); return out; }
     function live() { return N.filter(function (n) { return n.s !== 'gone'; }); }
 
+    var seen = {}; // ids already drawn (so only brand-new nodes play the "born" animation)
     function draw() {
-      var pos = {}, leaf = 0, h = '';
+      var pos = {}, leaf = 0, maxD = 0, h = '', dieIdx = 0;
       function lay(n, d) {
-        var ks = kids(n.id);
+        var ks = kids(n.id); if (d > maxD) maxD = d;
         if (!ks.length) pos[n.id] = [leaf++, d];
         else { ks.forEach(function (k) { lay(k, d + 1); }); pos[n.id] = [(pos[ks[0].id][0] + pos[ks[ks.length - 1].id][0]) / 2, d]; }
       }
       lay(N[0], 0);
-      var X = function (p) { return (p[0] + .5) * 700 / Math.max(leaf, 1); }, Y = function (p) { return 48 + p[1] * 80; };
-      live().forEach(function (n) { if (n.p && pos[n.id] && pos[n.p]) h += '<line class="pe" x1="' + X(pos[n.p]) + '" y1="' + Y(pos[n.p]) + '" x2="' + X(pos[n.id]) + '" y2="' + Y(pos[n.id]) + '"/>'; });
+      var W = Math.max(1000, leaf * 150), H = Math.max(440, 100 + maxD * 120 + 70);
+      svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
+      svg.style.minHeight = Math.min(H * 0.9, 620) + 'px';
+      var X = function (p) { return (p[0] + .5) * W / Math.max(leaf, 1); }, Y = function (p) { return 62 + p[1] * 120; };
+      live().forEach(function (n) {
+        if (n.p && pos[n.id] && pos[n.p]) h += '<line pathLength="1" class="pe' + (n.s === 'dead' ? ' dead' : '') + (seen[n.id] ? '' : ' born') + '" x1="' + X(pos[n.p]) + '" y1="' + Y(pos[n.p]) + '" x2="' + X(pos[n.id]) + '" y2="' + Y(pos[n.id]) + '"/>';
+      });
       live().forEach(function (n) {
         var p = pos[n.id]; if (!p) return; var x = X(p), y = Y(p);
-        h += '<g class="pn ' + n.s + (n.id === sel ? ' sel' : '') + '" data-id="' + n.id + '" tabindex="0" role="button" aria-label="P' + n.id + ' ' + t('lab.s.' + n.s) + '"><circle cx="' + x + '" cy="' + y + '" r="23"/><text x="' + x + '" y="' + (y + 4) + '">P' + n.id + '</text><text class="sub" x="' + x + '" y="' + (y + 40) + '">' + t('lab.s.' + n.s) + ' · ' + (n.p ? t('lab.pg.' + n.pg) : t('lab.root')) + '</text></g>';
+        var cls = n.s + (n.id === sel ? ' sel' : '') + (seen[n.id] ? '' : ' born');
+        var sty = n.s === 'dead' ? ' style="animation-delay:' + ((dieIdx++) * 0.28) + 's"' : '';
+        h += '<g class="pn ' + cls + '"' + sty + ' data-id="' + n.id + '" tabindex="0" role="button" aria-label="P' + n.id + ' ' + t('lab.s.' + n.s) + '">' +
+          (n.id === sel ? '<circle class="ring" cx="' + x + '" cy="' + y + '" r="40"/>' : '') +
+          '<circle class="body" cx="' + x + '" cy="' + y + '" r="31"/><text x="' + x + '" y="' + (y + 5) + '">P' + n.id + '</text>' +
+          '<text class="sub" x="' + x + '" y="' + (y + 56) + '">' + t('lab.s.' + n.s) + ' · ' + (n.p ? t('lab.pg.' + n.pg) : t('lab.root')) + '</text></g>';
+        seen[n.id] = 1;
       });
       svg.innerHTML = h;
       var s = get(sel), ok = s && s.s === 'run';
@@ -43,7 +55,7 @@
     function say(key, params) {
       var text = t(key, params); LOG.unshift(text); if (LOG.length > 6) LOG.pop(); lastText = text; draw();
     }
-    function reset() { N = [{ id: 100, p: 0, s: 'run', pg: 0 }]; nextPid = 101; sel = 100; LOG = []; lastText = t('lab.ph'); say('lab.msg.reset'); lastText = t('lab.ph'); draw(); }
+    function reset() { seen = {}; N = [{ id: 100, p: 0, s: 'run', pg: 0 }]; nextPid = 101; sel = 100; LOG = []; lastText = t('lab.ph'); say('lab.msg.reset'); lastText = t('lab.ph'); draw(); }
 
     function act(a) {
       if (a === 'reset') { reset(); return; }

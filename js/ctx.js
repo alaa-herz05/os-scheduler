@@ -100,7 +100,7 @@
         '<g class="qb" id="q-ev' + j + '"><ellipse cx="275" cy="' + y + '" rx="65" ry="20"/><text x="275" y="' + (y + 4) + '" text-anchor="middle">' + r[2] + '</text></g>' + ln('M210 ' + y + 'H150');
       else s += ln('M545 ' + y + 'H150');
     });
-    return s + '<circle class="tk" id="q-tk" r="9" style="transform:translate(60px,42px)"/></svg>';
+    return s + '<circle class="tk" id="q-tk" r="7" style="transform:translate(60px,42px)"/></svg>';
   }
 
   function initQueues() {
@@ -124,6 +124,7 @@
       });
       $('qd-st').textContent = t('qd.s.' + st);
       $('qd-msg').textContent = t('qd.m.' + msgKey);
+      tk.classList.toggle('hide', !busy && st !== 'term');
       mark();
     }
     function mv(path, next) {
