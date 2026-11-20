@@ -1,10 +1,4 @@
-/* ==========================================================================
-   Process Management & CPU Scheduling Simulator - styles
-   Visual identity inherited from the original Chapter 3 study guide:
-   dark purple palette, gradient cards, Space Grotesk / IBM Plex Sans / JetBrains Mono.
-   ========================================================================== */
 
-/* ---------- 1. Tokens & base ---------- */
 :root{
   --bg:#0a0612;--panel:#140c22;--panel2:#1b1030;--line:#3a2461;--g:#c9a2ff;--g2:#9b5cff;--gd:#5a35a6;
   --am:#ffb454;--txt:#efe6fb;--mut:#a794c4;--bad:#ff6b8a;--ok:#4ade80;--ink:#14052b;--deep:#07030f;
@@ -38,7 +32,7 @@ ul{margin:6px 0;padding-inline-start:20px}li{margin:3px 0}
 .panel{display:none;padding:22px 0 50px}.panel.on{display:block;animation:fi .3s ease}
 @keyframes fi{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 
-/* ---------- 3. Buttons, inputs, cards ---------- */
+
 .btn{display:inline-flex;align-items:center;gap:6px;justify-content:center;background:var(--g);color:var(--ink);border:1px solid var(--g);border-radius:8px;padding:9px 16px;cursor:pointer;font:600 14.5px "IBM Plex Sans",sans-serif;transition:.15s}
 .btn:hover:not(:disabled){box-shadow:0 0 16px rgba(155,92,255,.55)}
 .btn.o{background:transparent;color:var(--g);border-color:var(--gd)}
@@ -67,7 +61,7 @@ input.bad{border-color:var(--bad);background:rgba(255,107,138,.1)}
 [dir=rtl] .info::after{transform:translateX(50%)}
 .info:hover::after,.info:focus::after{display:block}
 
-/* ---------- 4. Dashboard ---------- */
+
 .dash{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px;margin-bottom:14px}
 .kpi{padding:12px 14px;border-radius:var(--r);border:1px solid var(--line);background:linear-gradient(160deg,var(--panel),var(--panel2));min-width:0}
 .kpi small{display:block;color:var(--mut);font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -76,7 +70,7 @@ input.bad{border-color:var(--bad);background:rgba(255,107,138,.1)}
 .kpi.flash{animation:flash .5s ease}
 @keyframes flash{from{border-color:var(--g);box-shadow:0 0 18px rgba(155,92,255,.6)}to{box-shadow:none}}
 
-/* ---------- 5. Process table ---------- */
+
 .addrow{display:grid;grid-template-columns:repeat(3,minmax(0,1fr)) auto;gap:8px;align-items:end;margin-bottom:8px}
 .addrow label{font-size:12.5px;color:var(--mut);display:block}
 .tools{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:8px 0}
@@ -93,7 +87,6 @@ tr.avg td{background:#1f0f3c;font-weight:700;color:var(--g)}
 .dimcol{opacity:.38}
 .empty{padding:22px;text-align:center;color:var(--mut);border:1px dashed var(--gd);border-radius:10px}
 
-/* ---------- 6. Algorithm picker & controls ---------- */
 .algos{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
 .algo{padding:10px 12px;border:1px solid var(--gd);border-radius:10px;background:#0f0720;color:var(--mut);cursor:pointer;text-align:start;font:inherit;transition:.2s}
 .algo b{display:block;font:700 15px "Space Grotesk",sans-serif;color:var(--txt)}
@@ -111,7 +104,6 @@ tr.avg td{background:#1f0f3c;font-weight:700;color:var(--g)}
 .clock .t{font:700 20px "JetBrains Mono",monospace;color:var(--txt)}
 .prog{height:6px;background:#0f0720;border-radius:9px;overflow:hidden;flex:1 1 100px}.prog i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--g2),var(--g));transition:width .25s}
 
-/* ---------- 7. State pipeline ---------- */
 .pipe{display:grid;grid-template-columns:1fr auto 1fr auto 1fr auto 1fr auto 1fr;gap:6px;align-items:stretch}
 .pst{border:1px solid var(--gd);border-radius:10px;background:#0f0720;padding:8px;min-height:92px;transition:.25s;min-width:0}
 .pst h4{font:600 12.5px "Space Grotesk",sans-serif;color:var(--mut);margin-bottom:6px;display:flex;justify-content:space-between;gap:4px}
@@ -130,7 +122,7 @@ tr.avg td{background:#1f0f3c;font-weight:700;color:var(--g)}
 .log{margin-top:10px;max-height:150px;overflow:auto;border-top:1px dashed var(--line);padding-top:6px;font-size:13px;color:var(--mut)}
 .log div{padding:2px 0;border-bottom:1px dotted #2a1f40}.log div:first-child{color:var(--txt)}.log time{font:600 12px "JetBrains Mono",monospace;color:var(--am);margin-inline-end:8px}
 
-/* ---------- 8. Gantt chart ---------- */
+
 .gscroll{overflow-x:auto;padding-bottom:6px;direction:ltr}
 .gwrap{padding:6px 16px 2px 14px;min-width:100%}
 .ginner{position:relative}
@@ -148,7 +140,7 @@ tr.avg td{background:#1f0f3c;font-weight:700;color:var(--g)}
 .gcur::after{content:attr(data-t);position:absolute;top:-17px;left:0;transform:translateX(-50%);background:var(--am);color:var(--ink);font:700 11px "JetBrains Mono",monospace;padding:0 6px;border-radius:5px}
 .legend{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;font-size:12.5px;color:var(--mut);direction:ltr}
 
-/* ---------- 9. Results & statistic cards ---------- */
+
 .stats{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin-bottom:12px}
 .stat{border:1px solid var(--g2);border-radius:10px;padding:10px 12px;background:#0f0720}
 .stat small{display:block;color:var(--mut);font-size:12.5px}
@@ -161,7 +153,7 @@ details.more summary::before{content:"▸ ";color:var(--am)}details.more[open] s
 [dir=rtl] details.more summary::before{content:"◂ "}[dir=rtl] details.more[open] summary::before{content:"▾ "}
 details.more>div{padding:0 14px 12px;font-size:14px}
 
-/* ---------- 10. Compare ---------- */
+
 .banner{display:flex;gap:12px;align-items:center;flex-wrap:wrap;padding:12px 16px;border-radius:var(--r);border:1px solid var(--am);background:rgba(255,180,84,.08);margin-bottom:14px}
 .barsgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-bottom:14px}
 .bgroup h3{display:flex;align-items:center;gap:6px}
@@ -178,7 +170,7 @@ details.more>div{padding:0 14px 12px;font-size:14px}
 .mini div{background:#0f0720;border:1px solid var(--line);border-radius:8px;padding:5px 2px}
 .mini small{display:block;font-size:11px;color:var(--mut)}.mini b{font:700 15px "JetBrains Mono",monospace;color:var(--txt)}
 
-/* ---------- 11. Learn / Lab ---------- */
+
 details.acc{background:linear-gradient(160deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:var(--r);margin:10px 0;overflow:hidden}
 details.acc>summary{cursor:pointer;padding:14px 18px;font-size:16.5px;font-weight:700;color:var(--g);list-style:none}
 details.acc>summary::before{content:"▸ ";color:var(--am)}details.acc[open]>summary::before{content:"▾ "}
@@ -210,7 +202,8 @@ details.acc>.body{padding:0 18px 16px}
 .flow span{padding:7px 13px;border:1px solid var(--gd);border-radius:8px;background:#0f0720;font-size:13.5px}
 .flow i{color:var(--gd);font-style:normal}
 .codebox{font:13px/1.5 "JetBrains Mono",monospace;background:var(--deep);border:1px solid var(--line);border-radius:8px;padding:8px 12px;color:var(--am);direction:ltr;text-align:left;margin-top:6px}
-/* Process Lab */
+
+
 .lab{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:16px;align-items:start}
 .pt-svg{width:100%;height:auto;display:block;background:var(--deep);border:1px solid var(--line);border-radius:10px;direction:ltr}
 .pe{stroke:var(--gd);stroke-width:2}
@@ -227,7 +220,7 @@ details.acc>.body{padding:0 18px 16px}
 .chal{font-size:13.5px;color:var(--mut)}.chal ol{margin:4px 0;padding-inline-start:20px}
 .plog{font-size:12.5px;color:var(--mut);border-top:1px dashed var(--line);margin-top:8px;padding-top:6px}
 .plog div{padding:3px 0;border-bottom:1px dotted #2a1f40}.plog div:first-child{color:var(--txt)}
-/* Quiz */
+
 .qbar{height:8px;background:#0f0720;border-radius:9px;overflow:hidden;margin:10px 0}.qbar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--g2),var(--g));transition:width .4s}
 .opt{display:block;width:100%;text-align:start;margin:7px 0;padding:10px 14px;border-radius:8px;border:1px solid var(--line);background:#0d0619;color:var(--txt);font:inherit;cursor:pointer;transition:.2s}
 .opt:hover:not(:disabled){border-color:var(--g);background:#1a0c33}
@@ -238,12 +231,12 @@ details.acc>.body{padding:0 18px 16px}
 .fb.ok{background:rgba(74,222,128,.1);border-inline-start:3px solid var(--ok)}.fb.no{background:rgba(255,107,138,.1);border-inline-start:3px solid var(--bad)}
 #score{font:700 21px "Space Grotesk",sans-serif;color:var(--g)}
 
-/* ---------- 12. Arabic / RTL ---------- */
+
 html[lang=ar] body{font-family:"Tajawal","IBM Plex Sans",sans-serif;font-size:16.5px}
 html[lang=ar] .btn,html[lang=ar] .tbn,html[lang=ar] h1,html[lang=ar] h2,html[lang=ar] h3,html[lang=ar] h4,html[lang=ar] summary,html[lang=ar] #score,html[lang=ar] .algo b{font-family:"Tajawal",sans-serif}
 .num,.gscroll,.codebox{direction:ltr}
 
-/* ---------- 13. Responsive ---------- */
+
 @media(max-width:1020px){
   .dash{grid-template-columns:repeat(3,minmax(0,1fr))}
   .sim-grid,.lab{grid-template-columns:1fr}
@@ -266,7 +259,7 @@ html[lang=ar] .btn,html[lang=ar] .tbn,html[lang=ar] h1,html[lang=ar] h2,html[lan
 }
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
 
-/* ---------- 14. Queues & Context Switch tab ---------- */
+
 .qs,.cs{width:100%;height:auto;direction:ltr;display:block}
 .qs text,.cs text{fill:var(--txt);font:600 14px "IBM Plex Sans",sans-serif}
 .qs text{font-size:11.5px}
